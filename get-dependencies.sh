@@ -47,9 +47,9 @@ for item in /tmp/VSCode-linux-x64/*; do
     esac
 done
 # Handle the bin/ subdir: code-tunnel binary + CLI script (rename to avoid conflict)
-mv -v /tmp/VSCode-linux-x64/bin/code-tunnel ./AppDir/bin/
-mv -v /tmp/VSCode-linux-x64/bin/code ./AppDir/bin/code-cli
-rm -rf /tmp/VSCode-linux-x64
+mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code-tunnel ./AppDir/bin/
+mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code ./AppDir/bin/code-cli
+rm -rf /tmp/VSCode-linux-${tgz_arch}
 
 # Extract version from the bundled package.json
 VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package.json)

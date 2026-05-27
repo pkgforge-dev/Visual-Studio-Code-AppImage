@@ -14,7 +14,8 @@ export DEPLOY_GTK=1
 
 # Deploy dependencies
 quick-sharun /usr/bin/code \
-  /usr/bin/gnome*
+  /usr/bin/gnome* \
+  /usr/lib/gnome-keyring/devel/gkm*.so*
 
 # Additional changes can be done in between here
 

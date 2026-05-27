@@ -3,17 +3,15 @@
 set -eu
 
 ARCH=$(uname -m)
-VERSION=$(pacman -Q visual-studio-code-bin | awk '{print $2; exit}') # example command to get version of application here
-export ARCH VERSION
+export ARCH
 export OUTPATH=./dist
 export ADD_HOOKS="self-updater.hook"
 export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
 export ICON=https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/resources/linux/code.png
-export DESKTOP=/usr/share/applications/code.desktop
 export DEPLOY_GTK=1
 
 # Deploy dependencies
-quick-sharun /opt/visual-studio-code/bin/code \
+quick-sharun ./AppDir/bin/code ./AppDir/bin/code-tunnel \
   /usr/bin/gnome* \
   /usr/lib/gnome-keyring/devel/gkm*.so* \
   /usr/lib/pkcs11/gnome*.so* \

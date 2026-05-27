@@ -6,9 +6,9 @@ ARCH=$(uname -m)
 
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
-pacman -Syu --noconfirm     \
-    libdbusmenu-glib        \
-    org.freedesktop.secrets
+pacman -Syu --noconfirm \
+    libdbusmenu-glib \
+    gnome-keyring
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"

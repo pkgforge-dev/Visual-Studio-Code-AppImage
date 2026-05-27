@@ -7,7 +7,7 @@
 [![Latest Stable Release](https://img.shields.io/github/v/release/pkgforge-dev/Visual-Studio-Code-AppImage)](https://github.com/pkgforge-dev/Visual-Studio-Code-AppImage/releases/latest)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/resources/linux/code.png" width="128" />
+  <img src="https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/resources/linux/code.png" width="128" /> 
 </p>
 
 

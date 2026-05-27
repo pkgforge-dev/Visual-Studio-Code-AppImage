@@ -6,21 +6,53 @@ ARCH=$(uname -m)
 
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
-# pacman -Syu --noconfirm PACKAGESHERE
+pacman -Syu --noconfirm \
+    libdbusmenu-glib
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
 get-debloated-pkgs --add-common --prefer-nano
 
 # Comment this out if you need an AUR package
-#make-aur-package PACKAGENAME
+#make-aur-package
 
 # If the application needs to be manually built that has to be done down here
+echo "Getting VS Code..."
+echo "---------------------------------------------------------------"
+case "$ARCH" in
+    x86_64)  tgz_arch=x64;;
+    aarch64) tgz_arch=arm64;;
+esac
 
-# if you also have to make nightly releases check for DEVEL_RELEASE = 1
-#
-# if [ "${DEVEL_RELEASE-}" = 1 ]; then
-# 	nightly build steps
-# else
-# 	regular build steps
-# fi
+DOWNLOAD_URL=$(curl -sI -o /dev/null -w '%{redirect_url}' \
+    "https://code.visualstudio.com/sha/download?build=stable&os=linux-$tgz_arch")
+
+if ! wget --retry-connrefused --tries=30 "$DOWNLOAD_URL" -O /tmp/vscode.tar.gz 2>/tmp/download.log; then
+    cat /tmp/download.log
+    exit 1
+fi
+
+mkdir -p ./AppDir/bin
+tar -xzf /tmp/vscode.tar.gz -C /tmp
+
+# The tarball extracts to VSCode-linux-tgz_arch/ with a root-level `code` ELF
+# (the Electron binary) and a bin/ subdirectory with the CLI script + tunnel.
+for item in /tmp/VSCode-linux-${tgz_arch}/*; do
+    case "$(basename "$item")" in
+        bin) ;;
+        *)   mv -v "$item" ./AppDir/bin/ ;;
+    esac
+done
+# Handle the bin/ subdir: code-tunnel binary + CLI script (rename to avoid conflict)
+mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code-tunnel ./AppDir/bin/
+mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code ./AppDir/bin/code-cli
+rm -rf /tmp/VSCode-linux-${tgz_arch}
+
+# Extract version
+VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package.json)
+echo "$VERSION" > ~/version
+echo "VS Code version: $VERSION"
+
+mkdir -p ./AppDir/share/applications
+wget -q -O ./AppDir/share/applications/code-url-handler.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code-url-handler.desktop
+wget -q -O ./AppDir/bin/code.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code.desktop

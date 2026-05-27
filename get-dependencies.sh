@@ -40,7 +40,7 @@ tar -xzf /tmp/vscode.tar.gz -C /tmp
 # (the Electron binary) and a bin/ subdirectory with the CLI script + tunnel.
 # Move everything into ./AppDir/bin/ following the pattern from
 # GitHub Desktop / FreeTube reference builds.
-for item in /tmp/VSCode-linux-x64/*; do
+for item in /tmp/VSCode-linux-${tgz_arch}/*; do
     case "$(basename "$item")" in
         bin) ;;
         *)   mv -v "$item" ./AppDir/bin/ ;;

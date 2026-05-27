@@ -13,7 +13,8 @@ export DESKTOP=/usr/share/applications/code.desktop
 export DEPLOY_GTK=1
 
 # Deploy dependencies
-quick-sharun /usr/bin/code
+quick-sharun /usr/bin/code \
+  /usr/bin/gnome*
 
 # Additional changes can be done in between here
 

@@ -36,10 +36,8 @@ fi
 mkdir -p ./AppDir/bin
 tar -xzf /tmp/vscode.tar.gz -C /tmp
 
-# The tarball extracts to VSCode-linux-x64/ with a root-level `code` ELF
+# The tarball extracts to VSCode-linux-tgz_arch/ with a root-level `code` ELF
 # (the Electron binary) and a bin/ subdirectory with the CLI script + tunnel.
-# Move everything into ./AppDir/bin/ following the pattern from
-# GitHub Desktop / FreeTube reference builds.
 for item in /tmp/VSCode-linux-${tgz_arch}/*; do
     case "$(basename "$item")" in
         bin) ;;
@@ -51,12 +49,12 @@ mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code-tunnel ./AppDir/bin/
 mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code ./AppDir/bin/code-cli
 rm -rf /tmp/VSCode-linux-${tgz_arch}
 
-# Extract version from the bundled package.json
+# Extract version
 VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package.json)
 echo "$VERSION" > ~/version
 echo "VS Code version: $VERSION"
 
-# Create .desktop entry (not shipped in the tarball)
+# Create .desktop entry
 cat > ./AppDir/code.desktop << 'EOF'
 [Desktop Entry]
 Name=Visual Studio Code

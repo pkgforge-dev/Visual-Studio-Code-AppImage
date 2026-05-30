@@ -53,24 +53,5 @@ VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package
 echo "$VERSION" > ~/version
 echo "VS Code version: $VERSION"
 
-# Create .desktop entry
-cat > ./AppDir/code.desktop << 'EOF'
-[Desktop Entry]
-Name=Visual Studio Code
-Comment=Code Editing. Redefined.
-GenericName=Text Editor
-Exec=code %F
-Icon=code
-Type=Application
-StartupNotify=false
-StartupWMClass=code
-Categories=TextEditor;Development;IDE;
-MimeType=text/plain;
-Actions=new-empty-window;
-Keywords=vscode;
-
-[Desktop Action new-empty-window]
-Name=New Empty Window
-Exec=code --new-window %F
-Icon=code
-EOF
+mkdir -p AppDir/share/applications
+wget -q -O ./AppDir/share/applications/code-url-handler.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code-url-handler.desktop

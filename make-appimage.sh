@@ -13,11 +13,7 @@ export DEPLOY_OPENGL=1
 export DEPLOY_VULKAN=1
 
 # Deploy dependencies
-quick-sharun ./AppDir/bin/code ./AppDir/bin/code-tunnel \
-  /usr/bin/gnome* \
-  /usr/lib/gnome-keyring/devel/gkm*.so* \
-  /usr/lib/pkcs11/gnome*.so* \
-  /usr/lib/security/pam*.so*
+quick-sharun ./AppDir/bin/code ./AppDir/bin/code-tunnel
 
 # Additional changes can be done in between here
 

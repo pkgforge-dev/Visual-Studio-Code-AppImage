@@ -29,7 +29,7 @@ DOWNLOAD_URL=$(curl -sI -o /dev/null -w '%{redirect_url}' \
 
 wget --retry-connrefused --tries=30 "$DOWNLOAD_URL" -O /tmp/vscode.tar.gz
 
-mkdir -p ./AppDir/bin
+mkdir -p ./AppDir/bin ./AppDir/share/applications
 tar -xvf /tmp/vscode.tar.gz
 mv -v ./VSCode-linux-x64/* ./AppDir/bin
 

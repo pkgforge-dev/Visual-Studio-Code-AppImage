@@ -31,7 +31,7 @@ wget --retry-connrefused --tries=30 "$DOWNLOAD_URL" -O /tmp/vscode.tar.gz
 
 mkdir -p ./AppDir/bin ./AppDir/share/applications
 tar -xvf /tmp/vscode.tar.gz
-mv -v ./VSCode-linux-x64/* ./AppDir/bin
+mv -v ./VSCode-linux-*/* ./AppDir/bin
 
 # Extract version
 VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package.json)

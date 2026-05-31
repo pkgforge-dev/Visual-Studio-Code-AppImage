@@ -7,7 +7,7 @@ ARCH=$(uname -m)
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-    libdbusmenu-glib
+	libdbusmenu-glib
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
@@ -20,39 +20,35 @@ get-debloated-pkgs --add-common --prefer-nano
 echo "Getting VS Code..."
 echo "---------------------------------------------------------------"
 case "$ARCH" in
-    x86_64)  tgz_arch=x64;;
-    aarch64) tgz_arch=arm64;;
+	x86_64)  farch=x64;;
+	aarch64) farch=arm64;;
 esac
 
 DOWNLOAD_URL=$(curl -sI -o /dev/null -w '%{redirect_url}' \
-    "https://code.visualstudio.com/sha/download?build=stable&os=linux-$tgz_arch")
+	"https://code.visualstudio.com/sha/download?build=stable&os=linux-$farch")
 
-if ! wget --retry-connrefused --tries=30 "$DOWNLOAD_URL" -O /tmp/vscode.tar.gz 2>/tmp/download.log; then
-    cat /tmp/download.log
-    exit 1
-fi
+wget --retry-connrefused --tries=30 "$DOWNLOAD_URL" -O /tmp/vscode.tar.gz
 
-mkdir -p ./AppDir/bin
-tar -xzf /tmp/vscode.tar.gz -C /tmp
-
-# The tarball extracts to VSCode-linux-tgz_arch/ with a root-level `code` ELF
-# (the Electron binary) and a bin/ subdirectory with the CLI script + tunnel.
-for item in /tmp/VSCode-linux-${tgz_arch}/*; do
-    case "$(basename "$item")" in
-        bin) ;;
-        *)   mv -v "$item" ./AppDir/bin/ ;;
-    esac
-done
-# Handle the bin/ subdir: code-tunnel binary + CLI script (rename to avoid conflict)
-mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code-tunnel ./AppDir/bin/
-mv -v /tmp/VSCode-linux-${tgz_arch}/bin/code ./AppDir/bin/code-cli
-rm -rf /tmp/VSCode-linux-${tgz_arch}
+mkdir -p ./AppDir/bin ./AppDir/share/applications
+tar -xvf /tmp/vscode.tar.gz
+mv -v ./VSCode-linux-*/* ./AppDir/bin
 
 # Extract version
 VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package.json)
 echo "$VERSION" > ~/version
 echo "VS Code version: $VERSION"
 
-mkdir -p ./AppDir/share/applications
-wget -q -O ./AppDir/share/applications/code-url-handler.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code-url-handler.desktop
-wget -q -O ./AppDir/bin/code.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code.desktop
+wget --retry-connrefused --tries=30 https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/resources/linux/code-url-handler.desktop -O ./AppDir/share/applications/code-url-handler.desktop
+wget --retry-connrefused --tries=30 https://raw.githubusercontent.com/microsoft/vscode/refs/heads/main/resources/linux/code.desktop -O ./AppDir/code.desktop
+
+sed -i \
+	-e 's/@@NAME_SHORT@@/Code/g'              \
+	-e 's/@@NAME@@/code/g'                    \
+	-e 's#@@EXEC@@#code#g'                    \
+	-e 's/@@ICON@@/visual-studio-code/g'      \
+	-e 's/@@URLPROTOCOL@@/vscode/g'           \
+	-e 's/@@NAME_LONG@@/Visual Studio Code/g' \
+	./AppDir/code.desktop ./AppDir/share/applications/code-url-handler.desktop
+
+# not needed
+rm -rf ./AppDir/bin/resources/app/node_modules/@github/copilot-linuxmusl-x64

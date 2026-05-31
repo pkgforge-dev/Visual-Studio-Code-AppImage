@@ -49,3 +49,6 @@ sed -i \
 	-e 's/@@URLPROTOCOL@@/vscode/g'           \
 	-e 's/@@NAME_LONG@@/Visual Studio Code/g' \
 	./AppDir/code.desktop ./AppDir/share/applications/code-url-handler.desktop
+
+# not needed
+rm -rf ./AppDir/bin/resources/app/node_modules/@github/copilot-linuxmusl-x64

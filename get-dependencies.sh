@@ -53,5 +53,6 @@ VERSION=$(awk -F'"' '/"version":/ {print $4}' ./AppDir/bin/resources/app/package
 echo "$VERSION" > ~/version
 echo "VS Code version: $VERSION"
 
-mkdir -p AppDir/share/applications
+mkdir -p ./AppDir/share/applications
 wget -q -O ./AppDir/share/applications/code-url-handler.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code-url-handler.desktop
+wget -q -O ./AppDir/bin/code.desktop https://raw.githubusercontent.com/microsoft/vscode/${VERSION}/resources/linux/code.desktop

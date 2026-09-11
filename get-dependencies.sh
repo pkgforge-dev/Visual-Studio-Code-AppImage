@@ -6,8 +6,7 @@ ARCH=$(uname -m)
 
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
-pacman -Syu --noconfirm \
-	libdbusmenu-glib
+pacman -Syu --noconfirm libdbusmenu-glib
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
